@@ -1,50 +1,5 @@
 <template>
   <div>
-    <!-- 搜索弹窗 -->
-    <el-dialog title="搜索记录" :visible.sync="dialogSearchVisible" :before-close="disagreeSearch">
-      <el-form :model="search" label-position="right" label-width="160px">
-        
-        <!-- <el-form-item label="序号">
-          <el-input v-model="search.id" class="inputBox"></el-input>
-        </el-form-item> -->
-
-        <el-form-item label="学号">
-          <el-input v-model="search.uid" class="inputBox"></el-input>
-        </el-form-item>
-       
-        <el-form-item label="用户名">
-          <el-input v-model="search.uname"></el-input>
-        </el-form-item>
-
-        <el-form-item label="密码">
-          <el-input v-model="search.pwd"></el-input>
-        </el-form-item>
-
-        <el-form-item label="性别">
-          <el-select v-model="search.sex" placeholder="请选择">
-            <el-option label="男" value="男"></el-option>
-            <el-option label="女" value="女"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="电话">
-          <el-input v-model="search.phone"></el-input>
-        </el-form-item>
-
-        <el-form-item label="邮箱">
-          <el-input v-model="search.email"></el-input>
-        </el-form-item>
-
-        <el-form-item label="专业">
-          <el-input v-model="search.class"></el-input>
-        </el-form-item>
-
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="disagreeSearch">取 消</el-button>
-        <el-button type="primary" @click="agreeSearch">搜 索</el-button>
-      </div>
-    </el-dialog>
     <!-- 修改弹窗 -->
     <el-dialog :title="editName" :visible.sync="dialogFormVisible" :before-close="disagreeEdit">
       <el-form
@@ -53,9 +8,6 @@
         label-width="160px"
         class="moveBox"
       >
-        <!-- <el-form-item label="序号">
-          <el-input v-model="editeditHzhGeneral.id" class="inputBox"></el-input>
-        </el-form-item> -->
 
         <el-form-item label="学号">
           <el-input v-model="editeditHzhGeneral.uid" class="inputBox"></el-input>
@@ -69,13 +21,6 @@
           <el-input v-model="editeditHzhGeneral.pwd"></el-input>
         </el-form-item>
 
-        <el-form-item label="性别">
-          <el-select v-model="editeditHzhGeneral.sex" placeholder="请选择">
-            <el-option label="男" value="男"></el-option>
-            <el-option label="女" value="女"></el-option>
-          </el-select>
-        </el-form-item>
-
         <el-form-item label="电话">
           <el-input v-model="editeditHzhGeneral.phone"></el-input>
         </el-form-item>
@@ -85,10 +30,9 @@
         </el-form-item>
 
         <el-form-item label="专业">
-          <el-input v-model="editeditHzhGeneral.class"></el-input>
+          <el-input v-model="editeditHzhGeneral.uclass"></el-input>
         </el-form-item>
         
-        <!-- </div> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="disagreeEdit">取 消</el-button>
@@ -103,39 +47,27 @@
         label-width="160px"
         class="moveBox"
       >
-        <!-- <el-form-item label="序号">
-          <el-input v-model="addModel.id" class="inputBox"></el-input>
-        </el-form-item> -->
 
-        <el-form-item label="学号">
-          <el-input v-model="addModel.uid" class="inputBox"></el-input>
+        <el-form-item label="学号" prop="uid">
+          <el-input v-model="addModel.uid"></el-input>
         </el-form-item>
-       
-        <el-form-item label="用户名">
-          <el-input v-model="addModel.uname"></el-input>
-        </el-form-item>
-
-        <el-form-item label="密码">
+        <el-form-item label="密码" prop="pwd">
           <el-input v-model="addModel.pwd"></el-input>
         </el-form-item>
-
-        <el-form-item label="性别">
-          <el-select v-model="addModel.sex" placeholder="请选择">
-            <el-option label="男" value="男"></el-option>
-            <el-option label="女" value="女"></el-option>
-          </el-select>
+        <el-form-item label="用户名" prop="uname">
+          <el-input v-model="addModel.uname"></el-input>
         </el-form-item>
-
-        <el-form-item label="电话">
+        <el-form-item label="电话" prop="phone">
           <el-input v-model="addModel.phone"></el-input>
         </el-form-item>
-
-        <el-form-item label="邮箱">
+        <el-form-item label="邮箱" prop="email">
           <el-input v-model="addModel.email"></el-input>
         </el-form-item>
-
-        <el-form-item label="专业">
-          <el-input v-model="addModel.class"></el-input>
+        <el-form-item label="专业" prop="uclass">
+          <el-select v-model="addModel.uclass" placeholder="请选择专业">
+            <el-option label="软件工程" value="软件工程"></el-option>
+            <el-option label="教育技术" value="教育技术"></el-option>
+          </el-select>
         </el-form-item>
         
         <!-- </div> -->
@@ -158,7 +90,14 @@
       <div slot="header" class="clearfix">
         <el-tag effect="dark" style="font-size:18px">学生信息</el-tag>
         <el-button type="primary" style="margin-top: 20px; margin-left:100px" size="mini" @click="handleAdd">增加<i class="el-icon-upload el-icon--right"></i></el-button>
-        <el-button icon="el-icon-search" circle style="float:right" @click="handleSearch"></el-button>
+        
+        <el-button icon="el-icon-search" circle style="float:right" @click="agreeSearch"></el-button>
+        <el-input
+          placeholder="请输入搜索学号"
+          v-model="searchInput"
+          clearable
+          style="width: 200px; float:right">
+        </el-input>
       </div>
       <div class="moveBox">
         <el-table
@@ -166,16 +105,14 @@
           stripe
           style="width: 100%"
         >
-          <!-- <el-table-column type="index" width="50" label="序号"></el-table-column> -->
           <el-table-column prop="uid" label="学号"></el-table-column>
 
           <el-table-column prop="uname" label="用户名"></el-table-column>
           <el-table-column prop="pwd" label="密码"></el-table-column>
-          <el-table-column prop="sex" label="性别"></el-table-column>
           <el-table-column prop="phone" label="电话"></el-table-column>
 
           <el-table-column prop="email" label="邮箱"></el-table-column>
-          <el-table-column prop="class" label="专业"></el-table-column>
+          <el-table-column prop="uclass" label="专业"></el-table-column>
 
           <el-table-column prop="date" label="操作">
             <template slot-scope="scope">
@@ -210,10 +147,6 @@ export default {
   created() {
     //页面被创建时执行一次查询函数
     this.acceptData();
-    //初始化表单
-    // this.search = this.searchModel;
-    // this.search.maxSurTime = this.getNowFormatDate(0);
-    // this.search.minSurTime = this.getNowFormatDate(10);
   },
   data() {
     return {
@@ -223,209 +156,11 @@ export default {
       // total: 0, //本次查询数据总数
       tableData: [
       
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
-        {
-        uid: "sd",
-        uname: "sd",
-        pwd: "sd",
-        sex: "sd",
-        phone: "sd",
-        email: "sd",
-        class: "sd"
-        },
       ], //本次查询的数据总集
 
       //【删除】相关数据
       dialogVisible: false, //确定删除弹窗隐现的布尔值
-      delId: null, //即将被删除的数据ID
+      delId: "", //即将被删除的数据ID
       delIndex: null,
       //【增加】相关数据
       dialogAddVisible: false,
@@ -434,74 +169,63 @@ export default {
         uid: "",
         uname: "",
         pwd: "",
-        sex: "",
         phone: "",
         email: "",
-        class: ""
+        uclass: ""
       },
       addModel: {
         uid: "",
         uname: "",
         pwd: "",
-        sex: "",
         phone: "",
         email: "",
-        class: ""
+        uclass: ""
       },
       //【搜索】相关数据
-      dialogSearchVisible: false,
-      search: {
-        uid: "",
-        uname: "",
-        pwd: "",
-        sex: "",
-        phone: "",
-        email: "",
-        class: ""
-      },
+      searchInput: "",
       //【修改】相关数据
       dialogFormVisible: false,
       editName: null,//修改弹窗标题
+      editId: "",
       editeditHzhGeneral: {
         uid: "",
         uname: "",
         pwd: "",
-        sex: "",
         phone: "",
         email: "",
-        class: ""
+        uclass: ""
       },
-      backendUrl: ""
+      backendUrl: "",
+      rules: {
+        uid: [{ required: true, message: "请填写学号", trigger: "blur" }],
+        uname: [{ required: true, message: "请填写用户名", trigger: "blur" }],
+        pwd: [{ required: true, message: "请设置密码", trigger: "blur" }],
+        email: [{ email: true,message:"请输入正确的邮箱格式" }]
+      }
     };
   },
   methods: {
     handleSizeChange: function (size) {
             this.pagesize = size;
-            // console.log(this.pagesize)  //每页下拉显示数据
     },
     handleCurrentChange: function(currentPage){
             this.currentPage = currentPage;
-            // console.log(this.currentPage)  //点击第几页
     },
     //查询数据函数
     acceptData() {
       let self = this;
         axios({
             method: "get",
-            url: self.backendUrl + "/...",
-            // url: "http://192.144.227.168:8089/info/insert",
-            // data:this.ruleForm
+            url: "http://101.200.135.43:8888/user/listStudent",
         }).then(res => {
             console.log(res);
-            self.tableData = res.data.data;
-            // self.total = self.tableData.length;
+            self.tableData = res.data;
             console.log("发送服务器成功执行");
         })//发送服务器成功执行
             .catch(err => {
                 console.log(err);
                 console.log("发送服务器失败执行");
             });//发送服务器失败执行
-        //res => console.log(res)
     },
     transformRequest(obj) {
       let str = [];
@@ -521,35 +245,45 @@ export default {
     //点击增加按钮
     handleAdd() {
       this.dialogAddVisible = true;
-      // this.editeditHzhGeneral = row;
       this.addTitle = "增加学生信息";
+      console.log("1111111111111111111111")
+      console.log(this.firstForm)
+      this.addModel = {
+        uid: "",
+        uname: "",
+        pwd: "",
+        phone: "",
+        email: "",
+        uclass: ""
+      }
     },
     // 确定增加方法
     agreeAdd(){
       let self = this;
       self.dialogAddVisible = false;
       axios({
-            method: "get",
-            url: self.backendUrl + "/...",
-            // url: "http://192.144.227.168:8089/info/insert",
+            method: "post",
+            url: "http://101.200.135.43:8888/user/register",
             data: self.addModel
         }).then(res => {
             console.log(res);
             self.$notify({
               title: '成功',
-              message: '信息更改成功！',
+              message: '增加成功！',
               type: 'success'
             });
-            console.log("发送服务器成功执行，更改成功");
+            console.log("发送服务器成功执行，增加成功");
+            console.log(self.addModel);
             self.acceptData();
         })//发送服务器成功执行
             .catch(err => {
                 console.log(err);
                 self.$notify.error({
                   title: '错误',
-                  message: '信息更改失败！'
+                  message: '增加失败！'
                 });
-                console.log("发送服务器失败执行,更改失败");
+                console.log(self.addModel);
+                console.log("发送服务器失败执行,增加失败");
             });//发送服务器失败执行
     },
     //取消增加方法
@@ -561,42 +295,31 @@ export default {
       });
       console.log(this.addModel);
       this.addModel = this.firstForm;
-      // this.editName = null;
-      // this.editId = null;
     },
 
     /**
      * 搜索操作
      */
-    //点击搜索按钮
-    handleSearch() {
-      this.dialogSearchVisible = true;
-    },
-    //取消搜索方法
-    disagreeSearch() {
-      this.dialogSearchVisible = false;
-      this.search = this.firstForm;
-      // this.search = this.searchModel;
-    },
     //确定搜索方法
     agreeSearch() {
       let self = this;
       self.dialogSearchVisible = false;
       axios({
             method: "get",
-            url: self.backendUrl + "/...",
-            // url: "http://192.144.227.168:8089/info/insert",
-            data: self.search
+            url: "http://101.200.135.43:8888/user/searchStu",
+            params: {
+              string: self.searchInput
+            }
         }).then(res => {
             console.log(res);
-            self.tableData = res.data.data;
+            self.tableData = res.data;
             self.$notify({
               title: '成功',
               message: '搜索成功！',
               type: 'success'
             });
             console.log("发送服务器成功执行，搜索成功");
-            self.acceptData();
+            // self.acceptData();
         })//发送服务器成功执行
             .catch(err => {
                 console.log(err);
@@ -608,45 +331,6 @@ export default {
             });//发送服务器失败执行
 
         this.dialogSearchVisible = false;
-        
-      // let data = this.transformRequest(this.search);
-      // let xmlhttp;
-      // if (window.XMLHttpRequest) {
-      //   xmlhttp = new XMLHttpRequest();
-      // } else {
-      //   // eslint-disable-next-line no-undef
-      //   xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-      // }
-      // let self = this;
-      // // eslint-disable-next-line no-undef
-      // xmlhttp.open("POST", self.backendUrl+"/general/selectGeneral", true);
-      // xmlhttp.setRequestHeader(
-      //   "Content-type",
-      //   "application/x-www-form-urlencoded"
-      // );
-      // xmlhttp.send(data);
-      // xmlhttp.onreadystatechange = doResult; //设置回调函数
-      // function doResult() {
-      //   if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      //     // eslint-disable-next-line no-console
-      //     console.log(xmlhttp.responseText);
-      //     self.tableData = JSON.parse(xmlhttp.responseText);
-      //     self.total = self.tableData.length;
-      //     // eslint-disable-next-line no-console
-      //     console.log(self.tableData);
-      //     self.$notify({
-      //       title: "查询成功",
-      //       message: "本页面数据已按条件刷新",
-      //       type: "success"
-      //     });
-      //   } else if (xmlhttp.readyState == 4 && xmlhttp.status != 200) {
-      //     self.$notify.error({
-      //       title: "查询失败",
-      //       message: "本次搜索查询失败，请检查您的网络连接或联系管理员"
-      //     });
-      //   }
-      // }
-      // this.search = this.searchModel;
     },
     /**
      * 修改操作
@@ -656,7 +340,7 @@ export default {
       this.dialogFormVisible = true;
       this.editeditHzhGeneral = row;
       // this.editeditHzhGeneral.id = row.id;
-      // this.editId = row.id;
+      this.editId = row.uid;
       this.editName = "修改" + this.editeditHzhGeneral.uname + "的信息";
     },
     //取消修改方法
@@ -675,9 +359,10 @@ export default {
       self.dialogFormVisible = false;
       axios({
             method: "get",
-            url: self.backendUrl + "/...",
-            // url: "http://192.144.227.168:8089/info/insert",
-            data: self.editeditHzhGeneral
+            url: "http://101.200.135.43:8888/user/updateStu",
+            params: {
+              id: self.editId
+              }
         }).then(res => {
             console.log(res);
             self.$notify({
@@ -687,8 +372,10 @@ export default {
             });
             console.log("发送服务器成功执行，更改成功");
             self.acceptData();
-        })//发送服务器成功执行
+        })//发送服务器成功执行 
             .catch(err => {
+                console.log(self.editeditHzhGeneral);
+                console.log(self.editId);
                 console.log(err);
                 self.$notify.error({
                   title: '错误',
@@ -705,7 +392,7 @@ export default {
       // console.log("index" + index);
       // console.log(row.id);
       this.delIndex = index;
-      this.delId = row.id;
+      this.delId = row.uid;
       console.log(this.delId);
       this.dialogVisible = true;
     },
@@ -723,14 +410,16 @@ export default {
     agreeDel() {
       let self = this;
       self.dialogVisible = false;
+      console.log(self.delId);
       axios({
             method: "get",
-            url: self.backendUrl + "/...",
-            // url: "http://192.144.227.168:8089/info/insert",
-            data:this.delId
+            url: "http://101.200.135.43:8888/user/delStu",
+            params: {
+              delId: this.delId
+            }
         }).then(res => {
             console.log(res);
-            this.$notify({
+            self.$notify({
               title: '成功',
               message: '信息删除成功！',
               type: 'success'
@@ -740,48 +429,13 @@ export default {
         })//发送服务器成功执行
             .catch(err => {
                 console.log(err);
-                this.$notify.error({
+                self.$notify.error({
                   title: '错误',
                   message: '信息删除失败！'
                 });
+                console.log(self.delId)
                 console.log("发送服务器失败执行,删除失败");
             });//发送服务器失败执行
-        //res => console.log(res)
-      // let xmlhttp;
-      // if (window.XMLHttpRequest) {
-      //   xmlhttp = new XMLHttpRequest();
-      // } else {
-      //   // eslint-disable-next-line no-undef
-      //   xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-      // }
-      // let self = this;
-      // // eslint-disable-next-line no-undef
-      // xmlhttp.open("POST", self.backendUrl+"general/delGeneral?id=" + this.delId, true);
-      // xmlhttp.setRequestHeader(
-      //   "Content-type",
-      //   "application/x-www-form-urlencoded"
-      // );
-      // xmlhttp.send(null);
-      // xmlhttp.onreadystatechange = doResult; //设置回调函数
-      // function doResult() {
-      //   if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      //     // self.tableData.splice(self.delIndex, 1);
-      //     // self.total = self.tableData.length;
-      //     self.acceptData();
-      //     self.$notify({
-      //       title: "删除成功",
-      //       message: "本条记录已被成功删除",
-      //       type: "success"
-      //     });
-      //   } else if (xmlhttp.status != 200) {
-      //     self.$notify.error({
-      //       title: "删除失败",
-      //       message: "本条记录删除失败，请检查您的网络连接或联系管理员"
-      //     });
-      //   }
-      // }
-      self.delIndex = null;
-      self.delId = null;
     }
   }
 };

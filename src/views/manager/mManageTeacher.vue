@@ -125,7 +125,15 @@ export default {
     return {
       //【分页】相关数据
       total: 0, //本次查询数据总数
-      tableData: [], //本次查询的数据总集
+      tableData: [
+        {
+        tid: "12",
+        pwd:"12",
+        tname: "",
+        phone: "",
+        email: "",
+      }
+      ], //本次查询的数据总集
       currentPage: 1, //当前页
       pageSize: 10, //每页显示多少条记录
       //【删除】相关数据

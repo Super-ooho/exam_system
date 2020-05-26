@@ -7,31 +7,73 @@ Vue.use(VueRouter)
 
 const routes = [
 
-  {
+	{
 		path: '/',
 		component: Login,
 		name: 'Login',
 		hidden: true
-  },
-  {
-		path: "/teacher",
-		component: () => import("../views/teacher/Home"),
+	},
+	{
+		path: "/student",
+		component: () => import("../views/student/Home"),
 		children: [
 			{
+				path: "/Student/studentInformation",
+				meta: { name: "个人信息", icon: "el-icon-tickets" },
+				component: () => import("../views/student/sSelfInformation.vue")
+			},
+			{
+				path: "/Student/Grade",
+				meta: { name: "成绩查询", icon: "el-icon-setting" },
+				component: () => import("../views/student/sGrade.vue")
+			},
+			{
+				path: "/Student/exam",
+				meta: { name: "考试列表", icon: "el-icon-s-order" },
+				component: () => import("../views/student/sExam.vue")
+			}
+		]
+	},
+	{
+		path: '/exam/:index',
+		component: () => import('../views/student/sExamDetail.vue')
+	},
+	{
+		path: '/grade/:index',
+		component: () => import('../views/student/sGradeDetail.vue')
+	},
+	{
+		path: "/teacher",
+		component: () => import("../views/teacher/Home"),
+		redirect:"/Teacher/selfInformation", // 设置默认打开的页面
+		children: [
+			{
+				path: "/Teacher/selfInformation",
+				meta: {name: "个人信息", icon: "el-icon-user"},
+				component: () => import("../views/teacher/tSelfInformation.vue")
+			},
+			{
 				path: "/Teacher/studentInformation",
-				meta: {name: "学生信息", icon: "el-icon-tickets"},
+				meta: {name: "学生信息", icon: "el-icon-s-custom"},
 				component: () => import("../views/teacher/tManageStudent.vue")
 			},
 			{
-				path: "/Teacher/selfInformation",
-				meta: {name: "个人信息", icon: "el-icon-setting"},
-				component: () => import("../views/teacher/tSelfInformation.vue")
+				path: "/Teacher/paperManage",
+				meta: {name: "试卷信息", icon: "el-icon-document-checked"},
+				component: () => import("../views/teacher/tManagePaper.vue")
 			},
+			{
+				path: "/Teacher/questionManage",
+				meta: {name: "试题信息", icon: "el-icon-edit-outline"},
+				component: () => import("../views/teacher/tManageQuestion.vue")
+			},
+			
 		]
 	},
 	{
 		path: "/manager",
 		component: () => import("../views/manager/Home"),
+		redirect:"/Manager/studentInformation",
 		children: [
 			{
 				path: "/Manager/studentInformation",
@@ -44,7 +86,8 @@ const routes = [
 				component: () => import("../views/manager/mManageTeacher.vue")
 			},
 		]
-	}
+	},
+	
 ]
 
 const router = new VueRouter({

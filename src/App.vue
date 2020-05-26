@@ -33,7 +33,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("synchronousAction");
+    // this.$store.dispatch("synchronousAction");
   }
 };
 </script>

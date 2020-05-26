@@ -93,7 +93,7 @@
 import axios from "axios";
 export default {
   created() {
-    this.pageShowOnly();
+    // this.pageShowOnly();
   },
   name: "Login",
   data() {
@@ -124,9 +124,9 @@ export default {
     };
   },
   methods: {
-    pageShowOnly() {
-      this.$store.dispatch("removeAllAction");
-    },
+    // pageShowOnly() {
+    //   this.$store.dispatch("removeAllAction");
+    // },
     clickLogin() {
       //发送网络请求
       let xmlhttp;
@@ -157,22 +157,33 @@ export default {
       // eslint-disable-next-line no-unused-vars
       function doResult(data) {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          console.log(xmlhttp);
           let data = xmlhttp.responseText;
-          if (data == true && this.userInfo.jur == "1") {
+          //全局存储用户id
+          self.$store.commit({
+          type: 'changeId',
+          loginId: self.userInfo.username
+          });
+          console.log(self.userInfo.username);
+          console.log(self.$store.state.Id);
+          // console.log(data);
+          console.log(self.userInfo.jur);
+          if (data == "true" && self.userInfo.jur == "1") {
             //将登录状态写入store.state
-            self.$store.dispatch("loginAction", {
-              loginInfo: self.userInfo
-            });
+            // self.$store.dispatch("loginAction", {
+            //   loginInfo: self.userInfo
+            // });
             // 提示登录成功的信息
             //跳转到管理员界面
+            console.log("管理员");
             self.$router.push({ path: '/manager' });
-          } else if (data == true && this.userInfo.jur == "2") {
+          } else if (data == "true" && self.userInfo.jur == "2") {
             //跳转到老师界面
             self.$router.push({ path: '/teacher' });
-          } else if (data == true && this.userInfo.jur == "3") {
+          } else if (data == "true" && self.userInfo.jur == "3") {
             //跳转到学生界面
-            self.$router.push({ path: '/student' });
-          } else if (data == false) {
+            self.$router.push({ name: 'student' });
+          } else {
             self.$notify.error({
               title: "登录失败",
               message: "没有此用户或密码错误"

@@ -358,11 +358,12 @@ export default {
       let self = this;
       self.dialogFormVisible = false;
       axios({
-            method: "get",
+            method: "post",
             url: "http://101.200.135.43:8888/user/updateStu",
             params: {
               id: self.editId
-              }
+              },
+            data: self.editeditHzhGeneral
         }).then(res => {
             console.log(res);
             self.$notify({

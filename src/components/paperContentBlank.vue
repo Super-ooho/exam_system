@@ -168,7 +168,7 @@ created() {
     //点击增加按钮
     handleAdd() {
       this.dialogAddVisible = true;
-      this.addTitle = "增加选择题";
+      this.addTitle = "增加填空题";
       console.log("1111111111111111111111");
       console.log(this.firstForm);
       this.addModel = {

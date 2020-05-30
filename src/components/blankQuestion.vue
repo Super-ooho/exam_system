@@ -308,7 +308,7 @@ export default {
       this.editeditHzhGeneral = row;
       // this.editeditHzhGeneral.id = row.id;
       this.editId = row.bid;
-      this.editName = "修改" + this.editeditHzhGeneral.uname + "的信息";
+      this.editName = "修改填空题信息";
     },
     //取消修改方法
     disagreeEdit() {

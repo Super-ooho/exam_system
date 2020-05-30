@@ -268,7 +268,12 @@ export default {
   height: 100%;
   z-index: -100;
 }
-#particles-js,
+#particles-js{
+  background-image: url("../assets/backimg.jpg");
+  background-repeat: no-repeat;
+  background-size:100% 100%;
+}
+
 .particles-js-canvas-el {
   width: 100%;
   height: 100%;

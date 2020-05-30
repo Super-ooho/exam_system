@@ -16,10 +16,11 @@ const routes = [
 	{
 		path: "/student",
 		component: () => import("../views/student/Home"),
+		redirect:"/Student/studentInformation", // 设置默认打开的页面
 		children: [
 			{
 				path: "/Student/studentInformation",
-				meta: { name: "个人信息", icon: "el-icon-tickets" },
+				meta: { name: "首页", icon: "el-icon-house" },
 				component: () => import("../views/student/sSelfInformation.vue")
 			},
 			{
@@ -49,7 +50,7 @@ const routes = [
 		children: [
 			{
 				path: "/Teacher/selfInformation",
-				meta: {name: "个人信息", icon: "el-icon-user"},
+				meta: {name: "首页", icon: "el-icon-house"},
 				component: () => import("../views/teacher/tSelfInformation.vue")
 			},
 			{
@@ -84,6 +85,16 @@ const routes = [
 				path: "/Manager/teacherInformation",
 				meta: {name: "教师信息", icon: "el-icon-setting"},
 				component: () => import("../views/manager/mManageTeacher.vue")
+			},
+			{
+				path: "/Manager/paperManage",
+				meta: {name: "试卷信息", icon: "el-icon-document-checked"},
+				component: () => import("../views/teacher/tManagePaper.vue")
+			},
+			{
+				path: "/Manager/questionManage",
+				meta: {name: "试题信息", icon: "el-icon-edit-outline"},
+				component: () => import("../views/teacher/tManageQuestion.vue")
 			},
 		]
 	},

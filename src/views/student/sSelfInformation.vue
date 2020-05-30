@@ -76,6 +76,20 @@ export default {
     };
   },
   methods: {
+    //时间转换
+    resolvingDate(date){
+    //date是传入的时间
+      let d = new Date(date);
+
+      let month = (d.getMonth() + 1) < 10 ? '0'+(d.getMonth() + 1) : (d.getMonth() + 1);
+      let day = d.getDate()<10 ? '0'+d.getDate() : d.getDate();
+      let hours = d.getHours()<10 ? '0'+d.getHours() : d.getHours();
+      let min = d.getMinutes()<10 ? '0'+d.getMinutes() : d.getMinutes();
+      let sec = d.getSeconds()<10 ? '0'+d.getSeconds() : d.getSeconds();
+
+      let times=d.getFullYear() + '-' + month + '-' + day + ' ' + hours + ':' + min + ':' + sec;
+      return times
+    },
     //查询数据函数
     acceptData() {
       let self = this;
@@ -85,6 +99,11 @@ export default {
         }).then(res => {
             console.log(res);
             self.tableData = res.data;
+            //改变时间格式
+            for (let i=0; i<self.tableData.length; i++){
+              self.tableData[i].deadline = self.resolvingDate(self.tableData[i].deadline);
+              console.log(i,self.tableData[i]);
+            }
             console.log("上面是试卷集");
         })//发送服务器成功执行
             .catch(err => {

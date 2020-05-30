@@ -374,7 +374,7 @@ export default {
       this.editeditHzhGeneral = row;
       // this.editeditHzhGeneral.id = row.id;
       this.editId = row.qid;
-      this.editName = "修改" + this.editeditHzhGeneral.uname + "的信息";
+      this.editName = "修改选择题信息";
     },
     //取消修改方法
     disagreeEdit() {

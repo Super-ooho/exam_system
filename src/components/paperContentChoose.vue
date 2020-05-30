@@ -107,7 +107,7 @@
     <!-- 单选题 -->
     <el-card class="box-card">
         <div slot="header" class="clearfix">
-            <span>单选题 {{paperRow}}</span>
+            <span>单选题</span>
             <el-button type="primary" style="float: right; margin-right: 46px;" size="mini" @click="handleAdd">增加选择题<i class="el-icon-upload el-icon--right"></i></el-button>
         </div>
         <el-card v-for="(item, index) in chooseList" :key="index" class="text item">

@@ -7,10 +7,10 @@
       </span>
     </el-dialog>
     <el-header>
-      <el-form :inline="true" v-model="texts" label-width="300px">
-        <el-form-item label="试卷名称：" class="labeiSize">{{texts.pname}}</el-form-item>
-        <el-form-item label="学生姓名：" class="labeiSize">{{texts.uid}}</el-form-item>
-        <el-form-item label="测验限时：" class="labeiSize">{{texts.ptime}}min</el-form-item>
+      <el-form :inline="true" v-model="papers" label-width="200px">
+        <el-form-item label="试卷名称：" class="labeiSize">{{papers.pname}}</el-form-item>
+        <el-form-item label="学生姓名：" class="labeiSize">{{papers.uid}}</el-form-item>
+        <el-form-item label="测验限时：" class="labeiSize">{{papers.ptime}}min</el-form-item>
         <el-form-item label="倒计时：" class="labeiSize">{{keepTime}}</el-form-item>
       </el-form>
     </el-header>
@@ -22,43 +22,34 @@
               <i class="el-icon-s-grid"></i>答题卡
             </h1>
           </div>
-          <el-collapse>
-            <el-collapse-item>
+          <el-collapse v-model="activeNames">
+            <el-collapse-item name="1">
               <template slot="title">
                 <h2>单选题</h2>
-                <span>共{{texts.queNum}}题</span>
+                <span>共{{papers.queNum}}题</span>
               </template>
               <el-button
                 class="answer-button"
                 circle
                 size="small"
-                v-show="typeof item.sanswer=='undefined'"
+                :class="{answer: item.isCheck} "
                 v-for="(item,index) in exams"
-                :key="index+'1'"
+                :key="index"
                 @click.native="jump(index)"
               >{{index+1}}</el-button>
-              <el-button
-                class="answer-buttong"
-                circle
-                size="small"
-                v-show="typeof item.sanswer!='undefined'"
-                v-for="(item,index) in exams"
-                :key="index+'2'"
-                @click.native="jump(index)"
-              >{{index+1}}</el-button>
-              <!-- <el-button  class="answer-button" circle size="small" v-for="index of item.count" :id="'answer'+item.code+index"  @click.native="jump(item.code+index)">{{index}}</el-button> -->
             </el-collapse-item>
-            <el-collapse-item>
+            <el-collapse-item name="2">
               <template slot="title">
                 <h2>填空题</h2>
-                <span>共{{texts.blankNum}}题</span>
+                <span>共{{papers.blankNum}}题</span>
               </template>
               <el-button
                 class="answer-button"
                 circle
                 size="small"
+                :class="{answer: item.isCheck} "
                 v-for="(item,index) in blank"
-                :key="index+'3'"
+                :key="index"
               >{{index+1}}</el-button>
             </el-collapse-item>
           </el-collapse>
@@ -69,11 +60,11 @@
           <div slot="header" class="clearfix">
             <span>单选题</span>
           </div>
-          <el-card v-for="(item,index) in exams " :key="index+'4'" class="text item" ref="examHeight">
+          <el-card v-for="(item,index) in exams " :key="index" class="text item" ref="examHeight">
             <div slot="header" class="clearfix">
-              <span>{{index+1}}、{{item.content}}（5分）</span>
+              <span>{{index+1}}、{{item.content}}（2分）</span>
             </div>
-            <el-radio-group v-model="item.sanswer">
+            <el-radio-group v-model="item.sanswer" :checked="item.isCheck" @change="changeSelect(index)">
               <el-radio label="A">A、{{item.aoption}}</el-radio>
               <br />
               <el-radio label="B">B、{{item.boption}}</el-radio>
@@ -92,7 +83,7 @@
             <div slot="header" class="clearfix">
               <span>{{index+1}}、{{item.content}}（5分）</span>
             </div>
-            <el-input v-model="item.sanswer"></el-input>
+            <el-input v-model="item.sanswer" @input="changeInput(index)"></el-input>
           </el-card>
         </el-card>
         <el-button type="primary" class="summit-button" @click="summmitExam()">提交测验</el-button>
@@ -101,7 +92,7 @@
   </el-container>
 </template>
 <script>
-// import axios from "axios";
+import axios from "axios";
 export default {
   created() {
     // 页面被创建时执行一次查询函数
@@ -110,6 +101,7 @@ export default {
     this.acceptExam();
     this.acceptExamQuestion();
     this.acceptExamBlank();
+    this.startTime();
     //初始化表单
     // this.search = this.searchModel;
     // this.search.maxSurTime = this.getNowFormatDate(0);
@@ -123,7 +115,8 @@ export default {
       settime: "",
       flag: false,
       score: "",
-      texts: {
+      activeNames: ['1','2'],
+      papers: {
         uid: "",
         pid: "",
         startime: "",
@@ -134,6 +127,15 @@ export default {
         name: "",
         pname: ""
       },
+      texts: {
+        teid: null,
+        uid: 2018011000,
+        pid: "",
+        startTime: "",
+        endTime: "",
+        time: null,
+        score: ""
+      },
       exam: [],
       exams: {
         aoption: "",
@@ -141,14 +143,16 @@ export default {
         coption: "",
         doption: "",
         answer: "",
-        sanswer: ""
+        sanswer: "",
+        isCheck: false,
       },
       answerstu: null,
       blank: {
         bid: "",
         content: "",
         answer: "",
-        pid: ""
+        pid: "",
+        isCheck:false,
       }
     };
   },
@@ -166,9 +170,9 @@ export default {
       this.$axios
         .get("http://101.200.135.43:8888/paper/getPaper?getPId=" + id, {})
         .then(res => {
-          this.texts = res.data;
+          this.papers = res.data;
           this.limittime = res.data.ptime;
-          console.log("texts" + this.limittime);
+          console.log("papers" + this.limittime);
         })
         .catch(err => {
           console.log(err);
@@ -180,7 +184,10 @@ export default {
         .get("http://101.200.135.43:8888/paper/getQuestions?getQId=" + id)
         .then(res => {
           this.exams = res.data;
-          console.log("exam" + this.exams);
+          for (let i = 0; i < this.exams.length; i++) {
+            this.$set(this.exams[i], "isCheck", false);
+          }
+          console.log("exam" +JSON.stringify( this.exams));
         })
         .catch(err => {
           console.log(err);
@@ -192,6 +199,9 @@ export default {
         .get("http://101.200.135.43:8888/paper/getBlanks?getBId=" + id)
         .then(res => {
           this.blank = res.data;
+          for (let i = 0; i < this.blank.length; i++) {
+            this.$set(this.blank[i], "isCheck", false);
+          }
           console.log(this.blank);
         })
         .catch(err => {
@@ -199,11 +209,10 @@ export default {
         });
     },
     StartCountDown() {
-      var thistime = parseInt(this.texts.ptime);
-      console.log("time" + thistime);
       var mydate = new Date();
       mydate.setMinutes(mydate.getMinutes() + this.limittime);
       this.settime = mydate;
+
       let time = setInterval(() => {
         if (this.flag == true) {
           clearInterval(time);
@@ -221,7 +230,7 @@ export default {
       let s = this.formate(parseInt(leftTime % 60));
       if (leftTime <= 0) {
         this.flag = true;
-        // alert("时间到，停止作答");
+        this.summmitExam();
       }
       this.keepTime = `${h}:${m}:${s}`;
     },
@@ -231,6 +240,22 @@ export default {
       } else {
         return `0${time}`;
       }
+    },
+    startTime() {
+      let yy = new Date().getFullYear();
+      let mm = new Date().getMonth() + 1;
+      let dd = new Date().getDate();
+      let hh = new Date().getHours();
+      let mf =
+        new Date().getMinutes() < 10
+          ? "0" + new Date().getMinutes()
+          : new Date().getMinutes();
+      let ss =
+        new Date().getSeconds() < 10
+          ? "0" + new Date().getSeconds()
+          : new Date().getSeconds();
+      this.texts.startTime =
+        yy + "-" + mm + "-" + dd + " " + hh + ":" + mf + ":" + ss;
     },
     summmitExam() {
       let len = this.exams.length;
@@ -273,6 +298,22 @@ export default {
         this.$set(this.answerstu[j], "anid", null);
         // this.answerstu[j].quid=this.blank[i].bid;
       }
+      let yy = new Date().getFullYear();
+      let mm = new Date().getMonth() + 1;
+      let dd = new Date().getDate();
+      let hh = new Date().getHours();
+      let mf =
+        new Date().getMinutes() < 10
+          ? "0" + new Date().getMinutes()
+          : new Date().getMinutes();
+      let ss =
+        new Date().getSeconds() < 10
+          ? "0" + new Date().getSeconds()
+          : new Date().getSeconds();
+      this.texts.endTime =
+        yy + "-" + mm + "-" + dd + " " + hh + ":" + mf + ":" + ss;
+      // this.texts.time=this.texts.endTime-this.texts.startTime;
+      this.texts.pid = this.papers.pid;
       let answerList = this.answerstu;
       // let a=JSON.stringify(answerList);
       console.log("s" + answerList);
@@ -282,6 +323,17 @@ export default {
         })
         .then(res => {
           this.score = res.data;
+          this.texts.score = res.data;
+          axios({
+                  method: "post",
+                  url: "http://101.200.135.43:8888/paper/addTests",
+                  data: this.texts
+              }).then(res => {
+              console.log("hhhahahaha" + res.data);
+              })
+                  .catch(err => {
+                      console.log(err);
+                  });
         })
         .catch(err => {
           console.log(err);
@@ -289,6 +341,12 @@ export default {
       this.dialogVisible = true;
       // delete(this.answerstu,'aoption');
       // console.log("answerstu" +a);
+    },
+    changeSelect(index) {
+      this.exams[index].isCheck=true;
+    },
+    changeInput(index){
+      this.blank[index].isCheck=true;
     },
     jump(index) {
       // let jump = this.$refs.exams("#" + postion);
@@ -319,7 +377,7 @@ export default {
   background-color: #242f42;
 }
 .labeiSize > :first-child {
-  font-size: 19px;
+  font-size: 18px;
   color: #fff;
 }
 .paper-left {
@@ -363,14 +421,14 @@ export default {
   background: #13ce66;
   border-color: #30b08f;
 }
-.answer-buttong {
-  background: #13ce66;
-  padding: 0px;
-  color: #0a0a0a;
-  border-color: #30b08f;
-  margin-left: 10px;
-  width: 30px;
-  height: 30px;
+.answer {
+  background: #13ce66 !important;
+  padding: 0px !important;
+  color: #0a0a0a !important;
+  border-color: #30b08f !important;
+  margin-left: 10px !important;
+  width: 30px !important;
+  height: 30px !important;
 }
 .answer-radio {
   display: list-item;

@@ -342,6 +342,7 @@ export default {
       // this.editeditHzhGeneral.id = row.id;
       this.editId = row.uid;
       this.editName = "修改" + this.editeditHzhGeneral.uname + "的信息";
+      console.log(this.editId);
     },
     //取消修改方法
     disagreeEdit() {
@@ -359,7 +360,10 @@ export default {
       self.dialogFormVisible = false;
       axios({
             method: "post",
-            url: "http://101.200.135.43:8888/user/updateStu?id="+self.editId,
+            url: "http://101.200.135.43:8888/user/updateStu",
+            params:{
+              updUId: self.editId
+            },
             data: self.editeditHzhGeneral
         }).then(res => {
             console.log(res);

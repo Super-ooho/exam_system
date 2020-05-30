@@ -10,7 +10,7 @@
                 <!-- 用户头像 -->
                 <div class="user-avator">
                     <!-- <img src="../assets/img/索罗.jpg" />s -->
-                    <span class="username">学生姓名</span>
+                    <span class="username">你好！{{username}}！</span>
                     <span class="esc el-icon-switch-button" @click="quit"></span>
                 </div>
             </div>
@@ -21,7 +21,9 @@
 export default {
     data(){
         return{
-            collapse:false
+            collapse:false,
+            username:this.global.username,
+
         }
     },
     methods:{

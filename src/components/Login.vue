@@ -159,13 +159,7 @@ export default {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
           console.log(xmlhttp);
           let data = xmlhttp.responseText;
-          //全局存储用户id
-          self.$store.commit({
-          type: 'changeId',
-          loginId: self.userInfo.username
-          });
-          console.log(self.userInfo.username);
-          console.log(self.$store.state.Id);
+          
           // console.log(data);
           console.log(self.userInfo.jur);
           if (data == "true" && self.userInfo.jur == "1") {
@@ -180,9 +174,14 @@ export default {
           } else if (data == "true" && self.userInfo.jur == "2") {
             //跳转到老师界面
             self.$router.push({ path: '/teacher' });
+            //全局存储老师信息
+            self.global.setusername(self.userInfo.username);
           } else if (data == "true" && self.userInfo.jur == "3") {
-            //跳转到学生界面
-            self.$router.push({ name: 'student' });
+            //跳转到学生界面    
+            //全局存储学生信息
+            // 路由跳转
+            self.$router.push({ path: '/student' });
+            self.global.setusername(self.userInfo.username);
           } else {
             self.$notify.error({
               title: "登录失败",

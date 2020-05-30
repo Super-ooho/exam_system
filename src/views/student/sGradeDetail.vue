@@ -7,9 +7,8 @@
       </span>
     </el-dialog>
     <el-header>
-      <el-form :inline="true" v-model="texts" label-width="300px">
+      <el-form :inline="true" v-model="texts" label-width="250px">
         <el-form-item label="试卷名称：" class="labeiSize">{{texts.pname}}</el-form-item>
-        <el-form-item label="学生姓名：" class="labeiSize">{{texts.uid}}</el-form-item>
         <el-form-item label="测验限时：" class="labeiSize">{{texts.ptime}}min</el-form-item>
       </el-form>
     </el-header>
@@ -71,7 +70,7 @@
           <!-- v-bind:class="{ active: isActive }" -->
           <el-card v-for="(item,index) in examp " :key="index" class="text item" ref="examHeight">
             <div slot="header" class="clearfix">
-              <span>{{index+1}}、{{item.content}}（5分）</span>
+              <span>{{index+1}}、{{item.content}}（2分）</span>
               <span class="trueOrWrong">{{item.true}}正确答案为 {{item.corrAns}}</span>
             </div>
             <el-radio-group v-model="item.sanswer" style="color:#0a0a0a">
@@ -179,7 +178,8 @@ export default {
         doption: "",
         answer: "",
         sanswer: "",
-        content: ""
+        content: "",
+        isCheck:false,
       },
       answerstu: null,
       blank: {
@@ -264,12 +264,12 @@ export default {
         this.$set(this.examp[i], "sanswerBW", false);
         this.$set(this.examp[i], "sanswerCW", false);
         this.$set(this.examp[i], "sanswerDW", false);
-        this.$set(this.examp[i], "true");
         delete this.examp[i].sanswer;
         this.$set(this.examp[i], "sanswer", this.answer[i].sanswer);
         this.$set(this.examp[i], "statement", this.answer[i].statement);
-        if (this.examp[i].corrAns == true) {
-          this.examp[i].true=="正确";
+        if (this.examp[i].statement == 'true') {
+          this.examp[i].sanswerAR = true;
+          console.log("true");
           if (this.examp[i].sanswer == "A") {
             this.examp[i].sanswerAR = true;
           } else if (this.examp[i].sanswer == "B") {
@@ -279,16 +279,16 @@ export default {
           } else if (this.examp[i].sanswer == "D") {
             this.examp[i].sanswerDR = true;
           }
-        } else if(this.examp[i].corrAns == false){
-          this.examp[i].true=="错误";
+        } else if (this.examp[i].statement == 'false') {
+          console.log("false");
           if (this.examp[i].sanswer == "A") {
-            this.examp[i].sanswerAW = false;
+            this.examp[i].sanswerAW = true;
           } else if (this.examp[i].sanswer == "B") {
-            this.examp[i].sanswerBW = false;
+            this.examp[i].sanswerBW = true;
           } else if (this.examp[i].sanswer == "C") {
-            this.examp[i].sanswerCW = false;
+            this.examp[i].sanswerCW = true;
           } else if (this.examp[i].sanswer == "D") {
-            this.examp[i].sanswerDW = false;
+            this.examp[i].sanswerDW = true;
           }
         }
       }
@@ -300,6 +300,8 @@ export default {
         this.$set(this.examb[j], "statement", this.answer[i].statement);
         this.$set(this.examb[j], "corrAns", this.answer[i].corrAns);
       }
+            console.log("hhhh" + JSON.stringify(this.examb));
+
     },
     jump(index) {
       // let jump = this.$refs.exams("#" + postion);
@@ -330,7 +332,7 @@ export default {
   background-color: #242f42;
 }
 .labeiSize > :first-child {
-  font-size: 19px;
+  font-size: 18px;
   color: #fff;
 }
 .paper-left {
@@ -374,7 +376,7 @@ export default {
   background: #13ce66;
   border-color: #30b08f;
 }
-.answer-buttong {
+.answer {
   background: #13ce66;
   padding: 0px;
   color: #0a0a0a;
@@ -441,4 +443,7 @@ export default {
 .trueOrWrong {
   float: right;
 }
+/* .el-radio__input.is-disabled .el-radio__inner, .el-radio__input.is-disabled.is-checked .el-radio__inner{
+  background-color:#13ce66;
+} */
 </style>

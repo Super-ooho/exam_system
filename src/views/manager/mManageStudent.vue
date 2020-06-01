@@ -90,6 +90,15 @@
       <div slot="header" class="clearfix">
         <el-tag effect="dark" style="font-size:18px">学生信息</el-tag>
         <el-button type="primary" style="margin-top: 20px; margin-left:100px" size="mini" @click="handleAdd">增加<i class="el-icon-upload el-icon--right"></i></el-button>
+        <download-excel
+          class="export-excel-wrapper"
+          :data="tableData"
+          :fields="json_fields"
+          name="学生信息.xls"
+          style="float:right"
+        >
+        <el-button type="success" round>导出EXCEL</el-button>
+        </download-excel>
         
         <el-button icon="el-icon-search" circle style="float:right" @click="agreeSearch"></el-button>
         <el-input
@@ -150,6 +159,22 @@ export default {
   },
   data() {
     return {
+      json_fields: {
+        "学号": "uid",
+        "用户名":"uname",
+        "密码":"pwd",
+        "电话":"phone",
+        "邮箱":"email",
+        "专业":"uclass",
+      },
+      json_meta: [
+        [
+          {
+            " key ": " charset ",
+            " value ": " utf- 8 "
+          }
+        ]
+      ],
       //【分页】相关数据
       currentPage:1, //初始页
       pagesize:10,    //    每页的数据
@@ -210,6 +235,20 @@ export default {
     },
     handleCurrentChange: function(currentPage){
             this.currentPage = currentPage;
+    },
+    exportStu:function(){
+      axios({
+            method: "get",
+            url: "http://101.200.135.43:8888/excel/exportStudent",
+        }).then(res => {
+            console.log(res);
+            self.tableData = res.data;
+            console.log("发送服务器成功执行");
+        })//发送服务器成功执行
+            .catch(err => {
+                console.log(err);
+                console.log("发送服务器失败执行");
+            });//发送服务器失败执行
     },
     //查询数据函数
     acceptData() {

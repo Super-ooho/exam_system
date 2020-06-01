@@ -107,8 +107,10 @@
     <!-- 单选题 -->
     <el-card class="box-card">
         <div slot="header" class="clearfix">
-            <span>单选题</span>
+            <span>选择题</span>
             <el-button type="primary" style="float: right; margin-right: 46px;" size="mini" @click="handleAdd">增加选择题<i class="el-icon-upload el-icon--right"></i></el-button>
+            <el-button type="primary" style="float: right; margin-right: 46px;" size="mini">确认上传<i class="el-icon-upload el-icon--right"></i></el-button>
+            <input type="file" @click="upload" class="file" style="float: right; margin-right: 46px;">
         </div>
         <el-card v-for="(item, index) in chooseList" :key="index" class="text item">
             <div slot="header" class="clearfix">
@@ -160,6 +162,7 @@ export default {
   },
   data() {
     return {
+      formData: null,
       chooseList: [
         
       ],
@@ -221,6 +224,38 @@ export default {
             console.log(res);
             self.chooseList = res.data;
             console.log("发送服务器成功执行");
+        })//发送服务器成功执行
+            .catch(err => {
+                console.log(err);
+                console.log("发送服务器失败执行");
+            });//发送服务器失败执行
+    },
+    upload() {
+      // var formData = new FormData() 
+      // 声明一个FormData对象
+      let self = this;
+      self.formData = new window.FormData() // vue 中使用 window.FormData(),否则会报 'FormData isn't definded'
+      self.formData.append('file', document.querySelector('input[type=file]').files[0]) // 'userfile' 这个名字要和后台获取文件的名字一样;
+       //'userfile'是formData这个对象的键名
+        axios({
+            method: "post",
+            url: "http://101.200.135.43:8888/paper/importQues?pid=" + self.paperRow,
+            data: self.formData,
+            headers: { 
+              'Content-Type': 'multipart/form-data'
+            }
+            // params:{
+            //   getBId: self.paperRow
+            // }
+        }).then(res => {
+            console.log(res);
+            console.log("上传成功");
+            self.$notify({
+              title: '成功',
+              message: '批量上传成功！',
+              type: 'success'
+            });
+            self.acceptData();
         })//发送服务器成功执行
             .catch(err => {
                 console.log(err);

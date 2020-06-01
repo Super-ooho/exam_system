@@ -9,7 +9,6 @@
     <el-header>
       <el-form :inline="true" v-model="papers" label-width="200px">
         <el-form-item label="试卷名称：" class="labeiSize">{{papers.pname}}</el-form-item>
-        <el-form-item label="学生姓名：" class="labeiSize">{{papers.uid}}</el-form-item>
         <el-form-item label="测验限时：" class="labeiSize">{{papers.ptime}}min</el-form-item>
         <el-form-item label="倒计时：" class="labeiSize">{{keepTime}}</el-form-item>
       </el-form>

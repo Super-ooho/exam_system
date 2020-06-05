@@ -1,29 +1,23 @@
-# front
+# 第二组 在线考试系统（前端）
 
-## Project setup
-```
-npm install
-```
+#### 技术：
+使用Vue框架搭建前端项目，通过Axios与后端进行数据交互
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+#### 模块
++ 学生模块
+	+ 考试记录查询
+    + 考试列表
++ 教师模块
+    + 学生信息管理
+    + 试题管理
+    + 试卷管理
++ 管理员模块
+    * 学生信息管理
+    * 教师信息管理
+    * 试题管理
+    * 试卷管理
 
-### Compiles and minifies for production
-```
-npm run build
-```
+#### 拓展功能
 
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
++ 学生成绩、学生信息excel下载
++ 试题批量上传
